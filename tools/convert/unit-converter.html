@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>단위 변환기 - 길이, 무게, 온도 변환 | ToolBox</title>
+  <meta name="description" content="길이, 무게, 온도 등 다양한 단위를 간편하게 변환합니다. 미터를 피트로, 킬로그램을 파운드로, 섭씨를 화씨로 즉시 변환하세요. 무료 단위 변환 계산기입니다.">
+  <meta name="keywords" content="단위 변환기, 길이 변환, 무게 변환, 온도 변환, 미터 피트, kg lb, 섭씨 화씨, unit converter">
+  <meta name="author" content="ToolBox">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://judysylph.com/tools/convert/unit-converter.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://judysylph.com/tools/convert/unit-converter.html">
+  <meta property="og:title" content="단위 변환기 - 길이, 무게, 온도 변환">
+  <meta property="og:description" content="다양한 단위를 간편하게 변환하는 무료 도구입니다.">
+  <meta property="og:image" content="https://judysylph.com/assets/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/variables.css">
+  <link rel="stylesheet" href="/assets/css/common.css">
+  <link rel="stylesheet" href="/assets/css/tools.css">
+
+  <style>
+    /* Unit converter specific styles */
+    .category-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+      border-bottom: 2px solid var(--color-border);
+      overflow-x: auto;
+    }
+
+    .category-tab {
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .category-tab:hover {
+      color: var(--color-text-primary);
+    }
+
+    .category-tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .converter-section {
+      display: none;
+    }
+
+    .converter-section.active {
+      display: block;
+    }
+
+    .swap-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto;
+      background-color: var(--color-bg-tertiary);
+      border: 2px solid var(--color-border);
+      border-radius: 50%;
+      color: var(--color-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .swap-button:hover {
+      background-color: var(--color-primary);
+      color: white;
+      transform: rotate(180deg);
+    }
+
+    .swap-button svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .conversion-display {
+      margin-top: var(--spacing-xl);
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-bg-secondary) 100%);
+      border: 2px solid var(--color-primary);
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+
+    .conversion-equation {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+    }
+
+    .conversion-value {
+      color: var(--color-primary);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .common-conversions {
+      margin-top: var(--spacing-lg);
+      padding: var(--spacing-md);
+      background-color: var(--color-bg-secondary);
+      border-radius: var(--radius-md);
+    }
+
+    .common-conversions h4 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .common-conversions ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .common-conversions li {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      padding: var(--spacing-xs) 0;
+    }
+  </style>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "단위 변환기",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "description": "길이, 무게, 온도 등 다양한 단위를 변환하는 도구입니다.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">본문으로 바로가기</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="site-brand">
+        <a href="/"><span class="site-name">ToolBox</span></a>
+        <span class="site-tagline">무료 온라인 도구 모음</span>
+      </div>
+
+      <nav class="main-nav" aria-label="메인 메뉴">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="/tools/finance/">금융</a></li>
+          <li class="nav-item"><a href="/tools/life/">생활</a></li>
+          <li class="nav-item"><a href="/tools/text/">텍스트</a></li>
+          <li class="nav-item"><a href="/tools/dev/">개발</a></li>
+          <li class="nav-item"><a href="/tools/image/">이미지</a></li>
+          <li class="nav-item"><a href="/tools/convert/">변환</a></li>
+          <li class="nav-item"><a href="/tools/date/">날짜</a></li>
+          <li class="nav-item"><a href="/tools/health/">건강</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-utils">
+        <button type="button" class="btn-icon theme-toggle" aria-label="다크모드 전환">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button type="button" class="btn-icon mobile-menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobile-nav">
+          <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-nav" class="mobile-nav" aria-label="모바일 메뉴">
+      <ul class="mobile-nav-list">
+        <li class="mobile-nav-item"><a href="/tools/finance/">금융</a></li>
+        <li class="mobile-nav-item"><a href="/tools/life/">생활</a></li>
+        <li class="mobile-nav-item"><a href="/tools/text/">텍스트</a></li>
+        <li class="mobile-nav-item"><a href="/tools/dev/">개발</a></li>
+        <li class="mobile-nav-item"><a href="/tools/image/">이미지</a></li>
+        <li class="mobile-nav-item"><a href="/tools/convert/">변환</a></li>
+        <li class="mobile-nav-item"><a href="/tools/date/">날짜</a></li>
+        <li class="mobile-nav-item"><a href="/tools/health/">건강</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="site-main">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="현재 위치">
+        <ol class="breadcrumb-list">
+          <li class="breadcrumb-item"><a href="/">홈</a></li>
+          <li class="breadcrumb-item"><a href="/tools/convert/">변환</a></li>
+          <li class="breadcrumb-item" aria-current="page">단위 변환기</li>
+        </ol>
+      </nav>
+
+      <!-- Page Header -->
+      <header class="page-header">
+        <h1 class="page-title">단위 변환기</h1>
+        <p class="page-description">
+          길이, 무게, 온도 등 다양한 단위를 간편하게 변환합니다.
+          입력과 동시에 실시간으로 결과가 계산됩니다.
+        </p>
+      </header>
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="length">길이</button>
+        <button class="category-tab" data-category="weight">무게</button>
+        <button class="category-tab" data-category="temperature">온도</button>
+      </div>
+
+      <!-- Tool Interface -->
+      <section class="content-section">
+        <div class="tool-interface">
+
+          <!-- Length Converter -->
+          <div id="length-converter" class="converter-section active">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="length-from-value" class="form-label">변환할 값</label>
+                <input
+                  type="number"
+                  id="length-from-value"
+                  class="form-input"
+                  placeholder="1"
+                  value="1"
+                  step="any"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="length-from-unit" class="form-label">단위</label>
+                <select id="length-from-unit" class="form-select">
+                  <option value="m">미터 (m)</option>
+                  <option value="km">킬로미터 (km)</option>
+                  <option value="cm">센티미터 (cm)</option>
+                  <option value="mm">밀리미터 (mm)</option>
+                  <option value="mile">마일 (mile)</option>
+                  <option value="yard">야드 (yard)</option>
+                  <option value="ft">피트 (ft)</option>
+                  <option value="in">인치 (in)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="swap-button" data-category="length" aria-label="단위 교환">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
+            </button>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="length-to-value" class="form-label">변환 결과</label>
+                <input
+                  type="text"
+                  id="length-to-value"
+                  class="form-input"
+                  readonly
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="length-to-unit" class="form-label">단위</label>
+                <select id="length-to-unit" class="form-select">
+                  <option value="m">미터 (m)</option>
+                  <option value="km">킬로미터 (km)</option>
+                  <option value="cm">센티미터 (cm)</option>
+                  <option value="mm">밀리미터 (mm)</option>
+                  <option value="mile">마일 (mile)</option>
+                  <option value="yard">야드 (yard)</option>
+                  <option value="ft" selected>피트 (ft)</option>
+                  <option value="in">인치 (in)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="conversion-display">
+              <div class="conversion-equation" id="length-equation"></div>
+            </div>
+
+            <div class="common-conversions">
+              <h4>자주 사용하는 변환</h4>
+              <ul>
+                <li>1 미터 = 3.28084 피트</li>
+                <li>1 킬로미터 = 0.621371 마일</li>
+                <li>1 인치 = 2.54 센티미터</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Weight Converter -->
+          <div id="weight-converter" class="converter-section">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="weight-from-value" class="form-label">변환할 값</label>
+                <input
+                  type="number"
+                  id="weight-from-value"
+                  class="form-input"
+                  placeholder="1"
+                  value="1"
+                  step="any"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="weight-from-unit" class="form-label">단위</label>
+                <select id="weight-from-unit" class="form-select">
+                  <option value="kg">킬로그램 (kg)</option>
+                  <option value="g">그램 (g)</option>
+                  <option value="mg">밀리그램 (mg)</option>
+                  <option value="ton">톤 (ton)</option>
+                  <option value="lb">파운드 (lb)</option>
+                  <option value="oz">온스 (oz)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="swap-button" data-category="weight" aria-label="단위 교환">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
+            </button>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="weight-to-value" class="form-label">변환 결과</label>
+                <input
+                  type="text"
+                  id="weight-to-value"
+                  class="form-input"
+                  readonly
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="weight-to-unit" class="form-label">단위</label>
+                <select id="weight-to-unit" class="form-select">
+                  <option value="kg">킬로그램 (kg)</option>
+                  <option value="g">그램 (g)</option>
+                  <option value="mg">밀리그램 (mg)</option>
+                  <option value="ton">톤 (ton)</option>
+                  <option value="lb" selected>파운드 (lb)</option>
+                  <option value="oz">온스 (oz)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="conversion-display">
+              <div class="conversion-equation" id="weight-equation"></div>
+            </div>
+
+            <div class="common-conversions">
+              <h4>자주 사용하는 변환</h4>
+              <ul>
+                <li>1 킬로그램 = 2.20462 파운드</li>
+                <li>1 파운드 = 453.592 그램</li>
+                <li>1 온스 = 28.3495 그램</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Temperature Converter -->
+          <div id="temperature-converter" class="converter-section">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="temp-from-value" class="form-label">변환할 값</label>
+                <input
+                  type="number"
+                  id="temp-from-value"
+                  class="form-input"
+                  placeholder="0"
+                  value="0"
+                  step="any"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="temp-from-unit" class="form-label">단위</label>
+                <select id="temp-from-unit" class="form-select">
+                  <option value="c">섭씨 (°C)</option>
+                  <option value="f">화씨 (°F)</option>
+                  <option value="k">켈빈 (K)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="swap-button" data-category="temperature" aria-label="단위 교환">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
+            </button>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="temp-to-value" class="form-label">변환 결과</label>
+                <input
+                  type="text"
+                  id="temp-to-value"
+                  class="form-input"
+                  readonly
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="temp-to-unit" class="form-label">단위</label>
+                <select id="temp-to-unit" class="form-select">
+                  <option value="c">섭씨 (°C)</option>
+                  <option value="f" selected>화씨 (°F)</option>
+                  <option value="k">켈빈 (K)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="conversion-display">
+              <div class="conversion-equation" id="temp-equation"></div>
+            </div>
+
+            <div class="common-conversions">
+              <h4>참고 온도</h4>
+              <ul>
+                <li>물의 어는점: 0°C = 32°F = 273.15K</li>
+                <li>물의 끓는점: 100°C = 212°F = 373.15K</li>
+                <li>사람 체온: 36.5°C = 97.7°F</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Guide Section -->
+      <section class="content-section tool-guide">
+        <h2 class="section-title">사용 방법 및 변환 공식</h2>
+        <div class="guide-content">
+          <h3>사용 방법</h3>
+          <ol>
+            <li>상단의 카테고리(길이/무게/온도)를 선택합니다.</li>
+            <li>변환할 값과 원래 단위를 입력/선택합니다.</li>
+            <li>변환하려는 단위를 선택합니다.</li>
+            <li>결과가 자동으로 계산되어 표시됩니다.</li>
+            <li>교환 버튼(↓)을 클릭하면 단위가 서로 바뀝니다.</li>
+          </ol>
+
+          <h3>길이 변환 공식</h3>
+          <p><strong>기본 단위: 미터 (m)</strong></p>
+          <ul>
+            <li>1 킬로미터 (km) = 1,000 미터</li>
+            <li>1 센티미터 (cm) = 0.01 미터</li>
+            <li>1 밀리미터 (mm) = 0.001 미터</li>
+            <li>1 마일 (mile) = 1,609.344 미터</li>
+            <li>1 야드 (yard) = 0.9144 미터</li>
+            <li>1 피트 (ft) = 0.3048 미터</li>
+            <li>1 인치 (in) = 0.0254 미터</li>
+          </ul>
+
+          <h3>무게 변환 공식</h3>
+          <p><strong>기본 단위: 그램 (g)</strong></p>
+          <ul>
+            <li>1 킬로그램 (kg) = 1,000 그램</li>
+            <li>1 밀리그램 (mg) = 0.001 그램</li>
+            <li>1 톤 (ton) = 1,000,000 그램</li>
+            <li>1 파운드 (lb) = 453.59237 그램</li>
+            <li>1 온스 (oz) = 28.349523125 그램</li>
+          </ul>
+
+          <h3>온도 변환 공식</h3>
+          <ul>
+            <li><strong>섭씨 → 화씨:</strong> °F = (°C × 9/5) + 32</li>
+            <li><strong>화씨 → 섭씨:</strong> °C = (°F - 32) × 5/9</li>
+            <li><strong>섭씨 → 켈빈:</strong> K = °C + 273.15</li>
+            <li><strong>켈빈 → 섭씨:</strong> °C = K - 273.15</li>
+          </ul>
+
+          <div class="notice-box info">
+            <strong>참고:</strong> 변환 결과는 소수점 아래 6자리까지 표시되며,
+            과학 및 공학 분야에서 일반적으로 사용되는 정밀도입니다.
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="content-section tool-faq">
+        <h2 class="section-title">자주 묻는 질문</h2>
+        <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+
+          <!-- FAQ 1 -->
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span itemprop="name">변환 결과가 정확한가요?</span>
+              <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <div itemprop="text">
+                <p>
+                  네, 이 변환기는 국제단위계(SI)와 공인된 변환 계수를 사용합니다.
+                  결과는 소수점 6자리까지 표시되며, 일반적인 용도에는 충분한 정밀도입니다.
+                </p>
+                <p>
+                  다만, 극도로 높은 정밀도가 필요한 과학 실험이나 산업 공정에서는
+                  전문 장비와 소프트웨어를 사용하시기 바랍니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span itemprop="name">음수 값도 변환할 수 있나요?</span>
+              <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <div itemprop="text">
+                <p>
+                  네, 음수 값도 변환할 수 있습니다. 특히 온도의 경우 섭씨 영하(-20°C 등)를
+                  화씨나 켈빈으로 변환하는 것이 가능합니다.
+                </p>
+                <p>
+                  단, 켈빈 온도는 절대 영도인 0K 아래로 내려갈 수 없으므로,
+                  -273.15°C 미만의 값은 물리적으로 불가능합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span itemprop="name">왜 마일과 킬로미터가 다른가요?</span>
+              <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <div itemprop="text">
+                <p>
+                  마일(mile)은 영국과 미국에서 사용하는 야드파운드법의 단위이고,
+                  킬로미터(km)는 국제단위계(SI)의 단위입니다.
+                </p>
+                <p>
+                  1 마일 = 1.609344 킬로미터로 정의되어 있으며,
+                  한국을 포함한 대부분의 국가에서는 킬로미터를 사용하지만,
+                  미국에서는 여전히 마일을 공식 단위로 사용합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span itemprop="name">화씨와 섭씨 중 어느 것이 더 정확한가요?</span>
+              <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <div itemprop="text">
+                <p>
+                  두 온도 체계 모두 정확하며, 단순히 기준점이 다를 뿐입니다.
+                </p>
+                <p>
+                  <strong>섭씨(Celsius):</strong> 물의 어는점을 0°C, 끓는점을 100°C로 정의<br>
+                  <strong>화씨(Fahrenheit):</strong> 물의 어는점을 32°F, 끓는점을 212°F로 정의
+                </p>
+                <p>
+                  대부분의 국가에서는 섭씨를 사용하지만, 미국에서는 화씨를 일상적으로 사용합니다.
+                  과학 분야에서는 주로 섭씨나 켈빈을 사용합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <aside class="related-tools">
+        <h2>관련 도구</h2>
+        <div class="tools-grid">
+
+          <a href="/tools/convert/currency-calculator.html" class="tool-card">
+            <div class="tool-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="tool-card-content">
+              <h3 class="tool-card-title">환율 계산기</h3>
+              <p class="tool-card-desc">실시간 환율로 금액 변환</p>
+            </div>
+          </a>
+
+          <a href="/tools/health/bmi-calculator.html" class="tool-card">
+            <div class="tool-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="tool-card-content">
+              <h3 class="tool-card-title">BMI 계산기</h3>
+              <p class="tool-card-desc">체질량지수 및 비만도 확인</p>
+            </div>
+          </a>
+
+          <a href="/tools/text/char-counter.html" class="tool-card">
+            <div class="tool-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+            </div>
+            <div class="tool-card-content">
+              <h3 class="tool-card-title">글자수 세기</h3>
+              <p class="tool-card-desc">텍스트 글자수 및 단어수 계산</p>
+            </div>
+          </a>
+
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-nav">
+        <div class="footer-section">
+          <h3>금융</h3>
+          <ul class="footer-links">
+            <li><a href="/tools/finance/loan-calculator.html">대출이자 계산기</a></li>
+            <li><a href="/tools/finance/salary-calculator.html">연봉 실수령액</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>생활</h3>
+          <ul class="footer-links">
+            <li><a href="/tools/life/delivery-tracking.html">택배 조회</a></li>
+            <li><a href="/tools/life/holiday-calculator.html">공휴일 계산기</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>텍스트</h3>
+          <ul class="footer-links">
+            <li><a href="/tools/text/char-counter.html">글자수 세기</a></li>
+            <li><a href="/tools/text/spell-checker.html">맞춤법 검사</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>개발</h3>
+          <ul class="footer-links">
+            <li><a href="/tools/dev/json-formatter.html">JSON 포맷터</a></li>
+            <li><a href="/tools/dev/base64-encoder.html">Base64 인코더</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <nav class="footer-legal" aria-label="법적 고지">
+          <a href="/pages/about.html">사이트 소개</a>
+          <a href="/pages/privacy-policy.html">개인정보처리방침</a>
+          <a href="/pages/terms-of-service.html">이용약관</a>
+          <a href="/pages/contact.html">문의하기</a>
+        </nav>
+        <p class="footer-copyright">&copy; 2024 ToolBox. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/common.js"></script>
+  <script src="/assets/js/tools/unit-converter.js"></script>
+</body>
+</html>
