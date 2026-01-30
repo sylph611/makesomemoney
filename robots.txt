@@ -1,0 +1,19 @@
+# https://judysylph.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://judysylph.com/sitemap.xml
+
+# Disallow crawling of admin or private areas (if any in the future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow all CSS and JS files for proper rendering
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
+
+# Crawl-delay (optional, adjust if needed)
+# Crawl-delay: 1
