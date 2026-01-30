@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JSON Formatter - JSON 포맷터
+   JSON Formatter
    ========================================================================== */
 
 'use strict';
@@ -120,12 +120,12 @@ function extractErrorPosition(errorMsg) {
   // Try to extract position info from error message
   const positionMatch = errorMsg.match(/position (\d+)/i);
   if (positionMatch) {
-    return `위치: ${positionMatch[1]}`;
+    return `Position: ${positionMatch[1]}`;
   }
 
   const lineMatch = errorMsg.match(/line (\d+)/i);
   if (lineMatch) {
-    return `줄: ${lineMatch[1]}`;
+    return `Line: ${lineMatch[1]}`;
   }
 
   return null;
@@ -225,7 +225,7 @@ function handleFormat() {
   const input = jsonInput.value.trim();
 
   if (!input) {
-    showError('JSON 데이터를 입력해주세요.');
+    showError('Please enter JSON data.');
     hideStats();
     return;
   }
@@ -255,7 +255,7 @@ function handleMinify() {
   const input = jsonInput.value.trim();
 
   if (!input) {
-    showError('JSON 데이터를 입력해주세요.');
+    showError('Please enter JSON data.');
     hideStats();
     return;
   }
@@ -285,7 +285,7 @@ function handleValidate() {
   const input = jsonInput.value.trim();
 
   if (!input) {
-    showError('JSON 데이터를 입력해주세요.');
+    showError('Please enter JSON data.');
     hideStats();
     return;
   }
@@ -316,9 +316,9 @@ async function handleCopy() {
 
   if (!text) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('복사할 내용이 없습니다', 'error');
+      window.Utils.showToast('Nothing to copy', 'error');
     } else {
-      alert('복사할 내용이 없습니다');
+      alert('Nothing to copy');
     }
     return;
   }
@@ -328,26 +328,26 @@ async function handleCopy() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(text);
       if (window.Utils && window.Utils.showToast) {
-        window.Utils.showToast('클립보드에 복사되었습니다', 'success');
+        window.Utils.showToast('Copied to clipboard', 'success');
       } else {
-        alert('클립보드에 복사되었습니다');
+        alert('Copied to clipboard');
       }
     } else {
       // Fallback for older browsers
       jsonInput.select();
       document.execCommand('copy');
       if (window.Utils && window.Utils.showToast) {
-        window.Utils.showToast('클립보드에 복사되었습니다', 'success');
+        window.Utils.showToast('Copied to clipboard', 'success');
       } else {
-        alert('클립보드에 복사되었습니다');
+        alert('Copied to clipboard');
       }
     }
   } catch (err) {
-    console.error('복사 실패:', err);
+    console.error('Copy failed:', err);
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('복사에 실패했습니다', 'error');
+      window.Utils.showToast('Failed to copy', 'error');
     } else {
-      alert('복사에 실패했습니다');
+      alert('Failed to copy');
     }
   }
 }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BMI Calculator - BMI 계산기
+   BMI Calculator
    ========================================================================== */
 
 'use strict';
@@ -46,44 +46,44 @@ function calculateBMI(height, weight) {
 function getBMICategory(bmi) {
   if (bmi < 18.5) {
     return {
-      name: '저체중',
+      name: 'Underweight',
       className: 'underweight',
-      range: 'BMI 18.5 미만',
-      description: '현재 체중이 건강 체중보다 낮습니다. 영양 부족으로 인한 면역력 저하, 골다공증 위험이 있을 수 있습니다. 균형 잡힌 식사와 적절한 운동으로 건강한 체중에 도달하는 것이 좋습니다.',
+      range: 'BMI below 18.5',
+      description: 'Your current weight is below the healthy weight range. There may be risks of weakened immunity and osteoporosis due to malnutrition. It is recommended to reach a healthy weight through a balanced diet and appropriate exercise.',
       gaugePosition: (bmi / 18.5) * 25 // 0-25% range
     };
   } else if (bmi < 25) {
     return {
-      name: '정상 체중',
+      name: 'Normal Weight',
       className: 'normal',
       range: 'BMI 18.5 ~ 24.9',
-      description: '이상적인 체중 범위입니다. 현재 체중을 유지하면서 규칙적인 운동과 균형 잡힌 식습관을 지속하시기 바랍니다. 정기적인 건강 검진을 통해 건강 상태를 확인하세요.',
+      description: 'This is an ideal weight range. Please continue to maintain your current weight through regular exercise and balanced eating habits. Check your health status through regular health checkups.',
       gaugePosition: 25 + ((bmi - 18.5) / (25 - 18.5)) * 25 // 25-50% range
     };
   } else if (bmi < 30) {
     return {
-      name: '과체중',
+      name: 'Overweight',
       className: 'overweight',
       range: 'BMI 25.0 ~ 29.9',
-      description: '정상 체중보다 높은 상태입니다. 고혈압, 당뇨병, 심혈관 질환의 위험이 증가할 수 있으므로 주의가 필요합니다. 식이 조절과 규칙적인 운동으로 체중 관리를 시작하는 것이 좋습니다.',
+      description: 'Your weight is above the normal range. The risk of hypertension, diabetes, and cardiovascular diseases may increase, so caution is needed. It is good to start weight management with dietary control and regular exercise.',
       gaugePosition: 50 + ((bmi - 25) / (30 - 25)) * 25 // 50-75% range
     };
   } else {
-    // 비만 세부 분류
+    // Obesity detailed classification
     let obesityLevel = '';
     if (bmi < 35) {
-      obesityLevel = '1단계 (경도 비만)';
+      obesityLevel = 'Class I (Mild Obesity)';
     } else if (bmi < 40) {
-      obesityLevel = '2단계 (중등도 비만)';
+      obesityLevel = 'Class II (Moderate Obesity)';
     } else {
-      obesityLevel = '3단계 (고도 비만)';
+      obesityLevel = 'Class III (Severe Obesity)';
     }
 
     return {
-      name: '비만',
+      name: 'Obese',
       className: 'obese',
-      range: `BMI 30.0 이상 - ${obesityLevel}`,
-      description: '비만 상태로 당뇨병, 고혈압, 심혈관 질환, 관절 질환 등 만성질환의 위험이 매우 높습니다. 체중 감량이 필요하며, 의사나 영양사와 상담하여 체계적인 관리 계획을 수립하시기 바랍니다.',
+      range: `BMI 30.0 and above - ${obesityLevel}`,
+      description: 'You are in an obese condition with very high risk of chronic diseases such as diabetes, hypertension, cardiovascular diseases, and joint diseases. Weight loss is necessary, and please consult with a doctor or nutritionist to establish a systematic management plan.',
       gaugePosition: Math.min(75 + ((bmi - 30) / 10) * 25, 98) // 75-100% range, max 98%
     };
   }
@@ -113,7 +113,10 @@ function calculateIdealWeightRange(height) {
  * @returns {string} Formatted number
  */
 function formatDecimal(num) {
-  return num.toFixed(1);
+  return num.toLocaleString('en-US', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  });
 }
 
 /* ==========================================================================
@@ -194,27 +197,27 @@ function handleSubmit(e) {
   // Validate inputs
   if (!height || !weight) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('키와 몸무게를 모두 입력해주세요', 'error');
+      window.Utils.showToast('Please enter both height and weight', 'error');
     } else {
-      alert('키와 몸무게를 모두 입력해주세요');
+      alert('Please enter both height and weight');
     }
     return;
   }
 
   if (height < 50 || height > 250) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('키는 50~250cm 범위로 입력해주세요', 'error');
+      window.Utils.showToast('Please enter height between 50~250cm', 'error');
     } else {
-      alert('키는 50~250cm 범위로 입력해주세요');
+      alert('Please enter height between 50~250cm');
     }
     return;
   }
 
   if (weight < 20 || weight > 300) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('몸무게는 20~300kg 범위로 입력해주세요', 'error');
+      window.Utils.showToast('Please enter weight between 20~300kg', 'error');
     } else {
-      alert('몸무게는 20~300kg 범위로 입력해주세요');
+      alert('Please enter weight between 20~300kg');
     }
     return;
   }

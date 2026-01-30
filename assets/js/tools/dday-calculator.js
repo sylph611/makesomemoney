@@ -51,32 +51,29 @@ function calculateDDay(targetDate, baseDate = new Date()) {
 }
 
 /**
- * Format date to Korean format
+ * Format date to US format
  * @param {Date} date - Date to format
- * @returns {string} Formatted date string (YYYY년 MM월 DD일)
+ * @returns {string} Formatted date string (Month DD, YYYY)
  */
-function formatDateKorean(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  return `${year}년 ${month}월 ${day}일`;
+function formatDateUS(date) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
 }
 
 /**
- * Get Korean weekday name
+ * Get English weekday name
  * @param {Date} date - Date
- * @returns {string} Weekday name in Korean
+ * @returns {string} Weekday name in English
  */
-function getKoreanWeekday(date) {
-  const weekdays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+function getEnglishWeekday(date) {
+  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   return weekdays[date.getDay()];
 }
 
 /**
  * Convert days to weeks and months
  * @param {number} days - Number of days
- * @returns {string} Formatted string (X주 Y일, X개월 Y일)
+ * @returns {string} Formatted string (X weeks Y days, X months Y days)
  */
 function convertToWeeksMonths(days) {
   const absDays = Math.abs(days);
@@ -92,18 +89,18 @@ function convertToWeeksMonths(days) {
   let result = '';
 
   if (weeks > 0) {
-    result += `${weeks}주`;
+    result += `${weeks} week${weeks > 1 ? 's' : ''}`;
     if (remainingDaysWeek > 0) {
-      result += ` ${remainingDaysWeek}일`;
+      result += ` ${remainingDaysWeek} day${remainingDaysWeek > 1 ? 's' : ''}`;
     }
   } else {
-    result += `${absDays}일`;
+    result += `${absDays} day${absDays !== 1 ? 's' : ''}`;
   }
 
   if (months > 0) {
-    result += ` (약 ${months}개월`;
+    result += ` (approx. ${months} month${months > 1 ? 's' : ''}`;
     if (remainingDaysMonth > 0) {
-      result += ` ${remainingDaysMonth}일`;
+      result += ` ${remainingDaysMonth} day${remainingDaysMonth > 1 ? 's' : ''}`;
     }
     result += ')';
   }
@@ -173,23 +170,25 @@ function displayResults(dday, targetDate, eventName) {
     // Past date (D+)
     ddayPrefix.textContent = 'D+';
     ddayNumber.textContent = Math.abs(dday);
-    ddayStatus.textContent = `${Math.abs(dday)}일이 지났습니다`;
+    const dayText = Math.abs(dday) === 1 ? 'day has passed' : 'days have passed';
+    ddayStatus.textContent = `${Math.abs(dday)} ${dayText}`;
   } else if (dday < 0) {
     // Future date (D-)
     ddayPrefix.textContent = 'D-';
     ddayNumber.textContent = Math.abs(dday);
-    ddayStatus.textContent = `${Math.abs(dday)}일 남았습니다`;
+    const dayText = Math.abs(dday) === 1 ? 'day remaining' : 'days remaining';
+    ddayStatus.textContent = `${Math.abs(dday)} ${dayText}`;
   } else {
     // Today (D-Day)
     ddayPrefix.textContent = 'D-';
     ddayNumber.textContent = 'Day';
-    ddayStatus.textContent = '오늘이 바로 그날입니다!';
+    ddayStatus.textContent = 'Today is the day!';
   }
 
   // Update date information
-  todayDate.textContent = formatDateKorean(today);
-  targetDateDisplay.textContent = formatDateKorean(targetDate);
-  targetWeekday.textContent = getKoreanWeekday(targetDate);
+  todayDate.textContent = formatDateUS(today);
+  targetDateDisplay.textContent = formatDateUS(targetDate);
+  targetWeekday.textContent = getEnglishWeekday(targetDate);
   weeksMonths.textContent = convertToWeeksMonths(dday);
 
   // Show progress bar only for future dates
@@ -198,8 +197,8 @@ function displayResults(dday, targetDate, eventName) {
     const startDate = new Date();
     const progress = calculateProgress(startDate, targetDate, today);
 
-    startDateEl.textContent = formatDateKorean(startDate);
-    endDateEl.textContent = formatDateKorean(targetDate);
+    startDateEl.textContent = formatDateUS(startDate);
+    endDateEl.textContent = formatDateUS(targetDate);
     progressFill.style.width = progress.toFixed(1) + '%';
     progressFill.textContent = progress.toFixed(1) + '%';
 
@@ -230,9 +229,9 @@ function handleSubmit(e) {
   // Validate
   if (!targetDateValue) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('목표 날짜를 선택해주세요', 'error');
+      window.Utils.showToast('Please select a target date', 'error');
     } else {
-      alert('목표 날짜를 선택해주세요');
+      alert('Please select a target date');
     }
     return;
   }
@@ -243,9 +242,9 @@ function handleSubmit(e) {
   // Validate date
   if (isNaN(targetDate.getTime())) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('올바른 날짜를 입력해주세요', 'error');
+      window.Utils.showToast('Please enter a valid date', 'error');
     } else {
-      alert('올바른 날짜를 입력해주세요');
+      alert('Please enter a valid date');
     }
     return;
   }
@@ -368,8 +367,8 @@ function setupAutoUpdate() {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     calculateDDay,
-    formatDateKorean,
-    getKoreanWeekday,
+    formatDateUS,
+    getEnglishWeekday,
     convertToWeeksMonths,
     calculateProgress,
     getDateFromOffset

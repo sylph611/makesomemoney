@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Age Calculator - 나이 계산기
+   Age Calculator
    ========================================================================== */
 
 'use strict';
@@ -33,10 +33,10 @@ const monthsAliveEl = document.getElementById('months-alive');
    ========================================================================== */
 
 /**
- * Calculate Korean age (만 나이)
+ * Calculate international age (Korean age / 만 나이)
  * @param {Date} birthDate - Birth date
  * @param {Date} referenceDate - Reference date
- * @returns {number} Korean age
+ * @returns {number} International age
  */
 function calculateKoreanAge(birthDate, referenceDate) {
   let age = referenceDate.getFullYear() - birthDate.getFullYear();
@@ -55,7 +55,7 @@ function calculateKoreanAge(birthDate, referenceDate) {
 }
 
 /**
- * Calculate year age (연 나이)
+ * Calculate year age
  * @param {Date} birthDate - Birth date
  * @param {Date} referenceDate - Reference date
  * @returns {number} Year age
@@ -65,7 +65,7 @@ function calculateYearAge(birthDate, referenceDate) {
 }
 
 /**
- * Calculate precise age (years, months, days)
+ * Calculate precise age breakdown (years, months, days)
  * @param {Date} birthDate - Birth date
  * @param {Date} referenceDate - Reference date
  * @returns {Object} Precise age breakdown
@@ -167,25 +167,25 @@ function calculateTimeAlive(totalDays) {
    ========================================================================== */
 
 /**
- * Format date to Korean format
+ * Format date in English format
  * @param {Date} date - Date to format
- * @returns {string} Formatted date string (YYYY년 MM월 DD일)
+ * @returns {string} Formatted date string (e.g., "January 1, 2024")
  */
 function formatDateKorean(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  return `${year}년 ${month}월 ${day}일`;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 }
 
 /**
- * Get Korean weekday name
+ * Get weekday name in English
  * @param {Date} date - Date
- * @returns {string} Weekday name in Korean
+ * @returns {string} Weekday name in English
  */
 function getKoreanWeekday(date) {
-  const weekdays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   return weekdays[date.getDay()];
 }
 
@@ -195,7 +195,7 @@ function getKoreanWeekday(date) {
  * @returns {string} Formatted number
  */
 function formatNumber(num) {
-  return num.toLocaleString('ko-KR');
+  return num.toLocaleString('en-US');
 }
 
 /* ==========================================================================
@@ -220,38 +220,38 @@ function displayResults(birthDate, referenceDate) {
   resultArea.classList.remove('result-hidden');
 
   // Display main ages
-  koreanAgeEl.textContent = `${koreanAge}세`;
-  yearAgeEl.textContent = `${yearAge}세`;
+  koreanAgeEl.textContent = `${koreanAge} years old`;
+  yearAgeEl.textContent = `${yearAge} years old`;
 
   // Display birth date information
   birthDateDisplayEl.textContent = formatDateKorean(birthDate);
   birthWeekdayEl.textContent = getKoreanWeekday(birthDate);
-  daysSinceBirthEl.textContent = `${formatNumber(totalDays)}일`;
+  daysSinceBirthEl.textContent = `${formatNumber(totalDays)} days`;
 
   // Display reference date information
   referenceDateDisplayEl.textContent = formatDateKorean(referenceDate);
   referenceWeekdayEl.textContent = getKoreanWeekday(referenceDate);
-  totalDaysEl.textContent = `${formatNumber(totalDays)}일`;
+  totalDaysEl.textContent = `${formatNumber(totalDays)} days`;
 
   // Display precise age
-  preciseAgeEl.textContent = `${preciseAge.years}년 ${preciseAge.months}개월 ${preciseAge.days}일`;
+  preciseAgeEl.textContent = `${preciseAge.years} years, ${preciseAge.months} months, ${preciseAge.days} days`;
 
   // Display next birthday
   nextBirthdayEl.textContent = formatDateKorean(nextBirthday.date);
 
   if (nextBirthday.isToday) {
-    daysToBirthdayEl.innerHTML = '<strong style="color: var(--color-success);">🎉 오늘이 생일입니다!</strong>';
+    daysToBirthdayEl.innerHTML = '<strong style="color: var(--color-success);">🎉 Happy Birthday!</strong>';
   } else if (nextBirthday.daysUntil === 0) {
-    daysToBirthdayEl.textContent = '오늘';
+    daysToBirthdayEl.textContent = 'Today';
   } else {
-    daysToBirthdayEl.textContent = `${formatNumber(nextBirthday.daysUntil)}일 남음`;
+    daysToBirthdayEl.textContent = `${formatNumber(nextBirthday.daysUntil)} days remaining`;
   }
 
   // Display time alive
   timeAliveEl.textContent =
-    `${formatNumber(timeAlive.hours)}시간 (약 ${formatNumber(timeAlive.minutes)}분)`;
-  weeksAliveEl.textContent = `${formatNumber(timeAlive.weeks)}주`;
-  monthsAliveEl.textContent = `약 ${formatNumber(timeAlive.months)}개월`;
+    `${formatNumber(timeAlive.hours)} hours (approx. ${formatNumber(timeAlive.minutes)} minutes)`;
+  weeksAliveEl.textContent = `${formatNumber(timeAlive.weeks)} weeks`;
+  monthsAliveEl.textContent = `Approx. ${formatNumber(timeAlive.months)} months`;
 
   // Scroll to results
   resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -273,9 +273,9 @@ function handleSubmit(e) {
 
   if (!birthDateValue) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('생년월일을 입력해주세요', 'error');
+      window.Utils.showToast('Please enter your date of birth', 'error');
     } else {
-      alert('생년월일을 입력해주세요');
+      alert('Please enter your date of birth');
     }
     return;
   }
@@ -285,9 +285,9 @@ function handleSubmit(e) {
   // Validate birth date
   if (isNaN(birthDate.getTime())) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('올바른 생년월일을 입력해주세요', 'error');
+      window.Utils.showToast('Please enter a valid date of birth', 'error');
     } else {
-      alert('올바른 생년월일을 입력해주세요');
+      alert('Please enter a valid date of birth');
     }
     return;
   }
@@ -301,9 +301,9 @@ function handleSubmit(e) {
 
     if (!referenceDateValue) {
       if (window.Utils && window.Utils.showToast) {
-        window.Utils.showToast('기준 날짜를 입력해주세요', 'error');
+        window.Utils.showToast('Please enter a reference date', 'error');
       } else {
-        alert('기준 날짜를 입력해주세요');
+        alert('Please enter a reference date');
       }
       return;
     }
@@ -317,9 +317,9 @@ function handleSubmit(e) {
   // Validate reference date
   if (isNaN(referenceDate.getTime())) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('올바른 기준 날짜를 입력해주세요', 'error');
+      window.Utils.showToast('Please enter a valid reference date', 'error');
     } else {
-      alert('올바른 기준 날짜를 입력해주세요');
+      alert('Please enter a valid reference date');
     }
     return;
   }
@@ -327,9 +327,9 @@ function handleSubmit(e) {
   // Check if birth date is after reference date
   if (birthDate > referenceDate) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('생년월일이 기준 날짜보다 미래일 수 없습니다', 'error');
+      window.Utils.showToast('Date of birth cannot be in the future', 'error');
     } else {
-      alert('생년월일이 기준 날짜보다 미래일 수 없습니다');
+      alert('Date of birth cannot be in the future');
     }
     return;
   }
@@ -341,9 +341,9 @@ function handleSubmit(e) {
 
   if (birthDate < maxBirthDate) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast(`생년월일은 ${maxAge}년 이내로 입력해주세요`, 'error');
+      window.Utils.showToast(`Date of birth must be within ${maxAge} years`, 'error');
     } else {
-      alert(`생년월일은 ${maxAge}년 이내로 입력해주세요`);
+      alert(`Date of birth must be within ${maxAge} years`);
     }
     return;
   }

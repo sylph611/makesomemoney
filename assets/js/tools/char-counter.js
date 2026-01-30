@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Character Counter - 글자수 세기
+   Character Counter
    ========================================================================== */
 
 'use strict';
@@ -77,7 +77,7 @@ function analyzeText(text) {
  * @returns {string} Formatted number
  */
 function formatNumber(num) {
-  return num.toLocaleString('ko-KR');
+  return num.toLocaleString('en-US');
 }
 
 /**
@@ -88,11 +88,11 @@ function updateResults(stats) {
   charWithSpace.textContent = formatNumber(stats.totalChars);
   charWithoutSpace.textContent = formatNumber(stats.charsNoSpace);
   wordCount.textContent = formatNumber(stats.totalWords);
-  koreanCount.textContent = formatNumber(stats.totalKorean) + '자';
-  englishCount.textContent = formatNumber(stats.totalEnglish) + '자';
-  numberCount.textContent = formatNumber(stats.totalNumbers) + '개';
-  spaceCount.textContent = formatNumber(stats.totalSpaces) + '개';
-  lineCount.textContent = formatNumber(stats.totalLines) + '줄';
+  koreanCount.textContent = formatNumber(stats.totalKorean);
+  englishCount.textContent = formatNumber(stats.totalEnglish);
+  numberCount.textContent = formatNumber(stats.totalNumbers);
+  spaceCount.textContent = formatNumber(stats.totalSpaces);
+  lineCount.textContent = formatNumber(stats.totalLines);
 }
 
 /* ==========================================================================
@@ -125,9 +125,9 @@ async function handleCopy() {
 
   if (!text) {
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('복사할 텍스트가 없습니다', 'error');
+      window.Utils.showToast('No text to copy', 'error');
     } else {
-      alert('복사할 텍스트가 없습니다');
+      alert('No text to copy');
     }
     return;
   }
@@ -137,26 +137,26 @@ async function handleCopy() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(text);
       if (window.Utils && window.Utils.showToast) {
-        window.Utils.showToast('텍스트가 복사되었습니다', 'success');
+        window.Utils.showToast('Text copied successfully', 'success');
       } else {
-        alert('텍스트가 복사되었습니다');
+        alert('Text copied successfully');
       }
     } else {
       // Fallback for older browsers
       textInput.select();
       document.execCommand('copy');
       if (window.Utils && window.Utils.showToast) {
-        window.Utils.showToast('텍스트가 복사되었습니다', 'success');
+        window.Utils.showToast('Text copied successfully', 'success');
       } else {
-        alert('텍스트가 복사되었습니다');
+        alert('Text copied successfully');
       }
     }
   } catch (err) {
-    console.error('복사 실패:', err);
+    console.error('Copy failed:', err);
     if (window.Utils && window.Utils.showToast) {
-      window.Utils.showToast('복사에 실패했습니다', 'error');
+      window.Utils.showToast('Failed to copy text', 'error');
     } else {
-      alert('복사에 실패했습니다');
+      alert('Failed to copy text');
     }
   }
 }

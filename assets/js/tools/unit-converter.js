@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Unit Converter - 단위 변환기
+   Unit Converter
    ========================================================================== */
 
 'use strict';
@@ -131,7 +131,7 @@ function formatNumber(num) {
   const rounded = parseFloat(num.toFixed(6));
 
   // Use locale string for thousands separator
-  return rounded.toLocaleString('ko-KR', {
+  return rounded.toLocaleString('en-US', {
     maximumFractionDigits: 6
   });
 }
@@ -204,7 +204,7 @@ function performLengthConversion() {
 
   if (isNaN(value)) {
     lengthToValue.value = '';
-    lengthEquation.textContent = '값을 입력하세요';
+    lengthEquation.textContent = 'Please enter a value';
     return;
   }
 
@@ -225,7 +225,7 @@ function performWeightConversion() {
 
   if (isNaN(value)) {
     weightToValue.value = '';
-    weightEquation.textContent = '값을 입력하세요';
+    weightEquation.textContent = 'Please enter a value';
     return;
   }
 
@@ -246,7 +246,7 @@ function performTemperatureConversion() {
 
   if (isNaN(value)) {
     tempToValue.value = '';
-    tempEquation.textContent = '값을 입력하세요';
+    tempEquation.textContent = 'Please enter a value';
     return;
   }
 

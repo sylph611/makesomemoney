@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Delivery Tracker - 택배 배송조회 통합
+   Delivery Tracker - Integrated Delivery Tracking
    ========================================================================== */
 
 'use strict';
@@ -23,162 +23,162 @@ let selectedCourier = null;
 const COURIERS = [
   {
     id: 'cj',
-    name: 'CJ대한통운',
+    name: 'CJ Daehan Express',
     icon: '📦',
     code: 'CJ',
     trackingUrl: 'https://www.cjlogistics.com/ko/tool/parcel/tracking',
     trackingPattern: /^\d{10,12}$/,
-    lengthHint: '10~12자리',
+    lengthHint: '10-12 digits',
     phoneNumber: '1588-1255',
-    description: '국내 최대 택배 업체',
+    description: 'Korea\'s largest courier service',
     tips: [
-      '운송장 번호는 10자리 또는 12자리 숫자입니다',
-      '발송 후 1~2시간 뒤 조회 가능합니다',
-      'CJ대한통운 앱에서 실시간 위치 추적 가능'
+      'Tracking number is 10 or 12 digits',
+      'Tracking available 1-2 hours after shipment',
+      'Real-time location tracking available in CJ app'
     ]
   },
   {
     id: 'epost',
-    name: '우체국택배',
+    name: 'Korea Post',
     icon: '📮',
     code: 'POST',
     trackingUrl: 'https://service.epost.go.kr/trace.RetrieveDomRigiTraceList.comm',
     trackingPattern: /^\d{13}$/,
-    lengthHint: '13자리',
+    lengthHint: '13 digits',
     phoneNumber: '1588-1300',
-    description: '우체국 택배 서비스',
+    description: 'Korea Post parcel service',
     tips: [
-      '운송장 번호는 13자리 숫자입니다',
-      '전국 우체국 네트워크를 통해 배송됩니다',
-      '우체국 방문 수령 가능'
+      'Tracking number is 13 digits',
+      'Delivered through nationwide post office network',
+      'Pickup available at post offices'
     ]
   },
   {
     id: 'lotte',
-    name: '롯데택배',
+    name: 'Lotte Global Logistics',
     icon: '🎁',
     code: 'LOTTE',
     trackingUrl: 'https://www.lotteglogis.com/home/reservation/tracking/linkView',
     trackingPattern: /^\d{12,13}$/,
-    lengthHint: '12~13자리',
+    lengthHint: '12-13 digits',
     phoneNumber: '1588-2121',
-    description: '롯데 글로벌 로지스',
+    description: 'Lotte Global Logistics',
     tips: [
-      '운송장 번호는 12자리 또는 13자리 숫자입니다',
-      '롯데택배 앱에서 배송 알림 받기 가능',
-      '전국 편의점 택배 서비스 제공'
+      'Tracking number is 12 or 13 digits',
+      'Delivery notifications available in Lotte app',
+      'Nationwide convenience store parcel service'
     ]
   },
   {
     id: 'hanjin',
-    name: '한진택배',
+    name: 'Hanjin Express',
     icon: '🚚',
     code: 'HANJIN',
     trackingUrl: 'https://www.hanjin.com/kor/CMS/DeliveryMgr/WaybillResult.do',
     trackingPattern: /^\d{10,12}$/,
-    lengthHint: '10~12자리',
+    lengthHint: '10-12 digits',
     phoneNumber: '1588-0011',
-    description: '한진 택배 서비스',
+    description: 'Hanjin parcel service',
     tips: [
-      '운송장 번호는 10자리 또는 12자리 숫자입니다',
-      '새벽배송 서비스 제공',
-      'GS25 편의점 택배 이용 가능'
+      'Tracking number is 10 or 12 digits',
+      'Dawn delivery service available',
+      'GS25 convenience store parcel service'
     ]
   },
   {
     id: 'logen',
-    name: '로젠택배',
+    name: 'Logen Express',
     icon: '📫',
     code: 'LOGEN',
     trackingUrl: 'https://www.ilogen.com/web/personal/trace',
     trackingPattern: /^\d{11}$/,
-    lengthHint: '11자리',
+    lengthHint: '11 digits',
     phoneNumber: '1588-9988',
-    description: '로젠 택배 서비스',
+    description: 'Logen parcel service',
     tips: [
-      '운송장 번호는 11자리 숫자입니다',
-      '기업 물류 전문 택배사',
-      '온라인 쇼핑몰 배송 다수'
+      'Tracking number is 11 digits',
+      'Specialized in corporate logistics',
+      'Many online shopping mall deliveries'
     ]
   },
   {
     id: 'kunyoung',
-    name: '건영택배',
+    name: 'Kunyoung Express',
     icon: '🚛',
     code: 'KUNYOUNG',
     trackingUrl: 'https://www.kunyoung.com/goods/goods_01.php',
     trackingPattern: /^\d{10,12}$/,
-    lengthHint: '10~12자리',
+    lengthHint: '10-12 digits',
     phoneNumber: '1588-0002',
-    description: '건영 택배 서비스',
+    description: 'Kunyoung parcel service',
     tips: [
-      '운송장 번호는 10자리 또는 12자리 숫자입니다',
-      '지역 밀착형 택배 서비스',
-      '신선식품 배송 전문'
+      'Tracking number is 10 or 12 digits',
+      'Local community-focused parcel service',
+      'Specialized in fresh food delivery'
     ]
   },
   {
     id: 'coupang',
-    name: '쿠팡로켓',
+    name: 'Coupang Rocket',
     icon: '🚀',
     code: 'COUPANG',
     trackingUrl: 'https://www.coupang.com/my/orders',
     trackingPattern: /^\d{8,15}$/,
-    lengthHint: '8~15자리',
+    lengthHint: '8-15 digits',
     phoneNumber: '1577-7011',
-    description: '쿠팡 로켓배송',
+    description: 'Coupang Rocket Delivery',
     tips: [
-      '쿠팡 앱 또는 웹사이트에서 조회하세요',
-      '주문번호로 배송 조회 가능',
-      '로켓배송은 당일/새벽배송 제공'
+      'Track on Coupang app or website',
+      'Track using order number',
+      'Rocket delivery offers same-day/dawn delivery'
     ]
   },
   {
     id: 'gs',
-    name: 'GS택배',
+    name: 'GS Networks',
     icon: '📦',
     code: 'GS',
     trackingUrl: 'https://www.gsp.hanex.co.kr/web/main.do',
     trackingPattern: /^\d{12}$/,
-    lengthHint: '12자리',
+    lengthHint: '12 digits',
     phoneNumber: '1588-1255',
-    description: 'GS 네트웍스 택배',
+    description: 'GS Networks parcel service',
     tips: [
-      '운송장 번호는 12자리 숫자입니다',
-      'GS25 편의점 택배 제공',
-      '편의점 반품 서비스 가능'
+      'Tracking number is 12 digits',
+      'GS25 convenience store parcel service',
+      'Convenience store return service available'
     ]
   },
   {
     id: 'daesin',
-    name: '대신택배',
+    name: 'Daesin Express',
     icon: '🚐',
     code: 'DAESIN',
     trackingUrl: 'https://www.ds3211.co.kr/freight/internalFreightSearch.ht',
     trackingPattern: /^\d{11,13}$/,
-    lengthHint: '11~13자리',
+    lengthHint: '11-13 digits',
     phoneNumber: '1588-9040',
-    description: '대신 택배 서비스',
+    description: 'Daesin parcel service',
     tips: [
-      '운송장 번호는 11자리 ~ 13자리 숫자입니다',
-      '전국 배송 네트워크 운영',
-      '기업 전용 배송 서비스 제공'
+      'Tracking number is 11 to 13 digits',
+      'Nationwide delivery network',
+      'Corporate delivery service available'
     ]
   },
   {
     id: 'kdexp',
-    name: '경동택배',
+    name: 'Kyungdong Express',
     icon: '🚙',
     code: 'KDEXP',
     trackingUrl: 'https://kdexp.com/basicNewDelivery.do',
     trackingPattern: /^\d{12,13}$/,
-    lengthHint: '12~13자리',
+    lengthHint: '12-13 digits',
     phoneNumber: '1588-9040',
-    description: '경동 택배 서비스',
+    description: 'Kyungdong parcel service',
     tips: [
-      '운송장 번호는 12자리 또는 13자리 숫자입니다',
-      '수도권 배송 전문',
-      '당일배송 서비스 제공'
+      'Tracking number is 12 or 13 digits',
+      'Specialized in Seoul metropolitan area',
+      'Same-day delivery service available'
     ]
   }
 ];
@@ -222,7 +222,7 @@ function handleCourierSelect(e) {
 
   // Update input hint
   if (selectedCourier) {
-    inputFormatHint.textContent = `${selectedCourier.lengthHint} 숫자`;
+    inputFormatHint.textContent = `${selectedCourier.lengthHint} numbers`;
 
     // Update tracking number pattern
     trackingNumberInput.pattern = selectedCourier.trackingPattern.source.replace(/\^|\$/g, '');
@@ -240,7 +240,7 @@ function handleCourierSelect(e) {
  * @param {Object} courier - Courier information
  */
 function showCompanyInfo(courier) {
-  companyInfoTitle.textContent = `${courier.icon} ${courier.name} 안내`;
+  companyInfoTitle.textContent = `${courier.icon} ${courier.name} Information`;
 
   companyInfoList.innerHTML = courier.tips.map(tip =>
     `<li>${tip}</li>`
@@ -265,21 +265,21 @@ function validateTrackingNumber(trackingNumber) {
   if (!selectedCourier) {
     return {
       valid: false,
-      error: '택배사를 선택해주세요'
+      error: 'Please select a courier service'
     };
   }
 
   if (!cleanNumber) {
     return {
       valid: false,
-      error: '운송장 번호를 입력해주세요'
+      error: 'Please enter a tracking number'
     };
   }
 
   if (!selectedCourier.trackingPattern.test(cleanNumber)) {
     return {
       valid: false,
-      error: `${selectedCourier.name}의 운송장 번호는 ${selectedCourier.lengthHint} 숫자여야 합니다`
+      error: `${selectedCourier.name} tracking number must be ${selectedCourier.lengthHint}`
     };
   }
 
@@ -343,7 +343,7 @@ function openTrackingPage(courier, trackingNumber) {
     case 'coupang':
       // Coupang requires login, so just open orders page
       trackingUrl = 'https://www.coupang.com/my/orders';
-      showToast('쿠팡은 로그인 후 주문 내역에서 확인하세요', 'info');
+      showToast('For Coupang, please check your order history after logging in', 'info');
       break;
 
     case 'gs':
@@ -394,7 +394,7 @@ function handleSubmit(e) {
   trackingNumberInput.setCustomValidity('');
 
   // Show success message
-  showToast(`${selectedCourier.name} 조회 페이지로 이동합니다`, 'success');
+  showToast(`Redirecting to ${selectedCourier.name} tracking page`, 'success');
 
   // Open tracking page
   setTimeout(() => {
@@ -413,7 +413,7 @@ function handleReset() {
   allButtons.forEach(btn => btn.classList.remove('active'));
 
   // Reset input hint
-  inputFormatHint.textContent = '예: 123456789012';
+  inputFormatHint.textContent = 'e.g., 123456789012';
 
   // Hide company info
   companyInfoBox.style.display = 'none';
